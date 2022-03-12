@@ -81,9 +81,9 @@ router.post("/register", async (req, res) => {
             process.env.TOKEN_SECRET
           ),
         });
-        const html = `<div><em>Dear ${result.name},</em><br>Please Click on the link below to activate your account.<br/><a href='${process.env.BASE_URL}/api/users/verify/${tokenObj.userId}/${tokenObj.token}'><button>Verify Account</button></a><br><br>ARS Team\n${process.env.USER}</div>`;
-        sendMail(user.email, "Verify Account", html);
-        return res.status(200).json(result);
+        const html = `<div><em>Dear ${result.name},</em><br>Please Click on the link below to activate your account.<br/><a href='${process.env.BASE_URL}/api/users/verify/${tokenObj.userId}/${tokenObj.token}'><button>Verify Account</button></a><br><br>ARS Team<br>${process.env.USER}</div>`;
+        const emailSent = sendMail(user.email, "Verify Account", html);
+        if (emailSent) return res.status(200).json(result);
       }
     });
   }
