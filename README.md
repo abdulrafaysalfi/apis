@@ -4,5 +4,5 @@
 
 # End Points for Now
 
-. User Login
-. User Registration
+* User Login
+* User Registration
