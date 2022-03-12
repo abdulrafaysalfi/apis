@@ -72,6 +72,7 @@ router.post("/register", async (req, res) => {
     user.save((err, result) => {
       if (err) {
         console.log(err);
+
         return res.status(404).send(err.message);
       } else {
         var tokenObj = new Token({
