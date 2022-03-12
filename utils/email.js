@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const sendMail = async (email, subject, html) => {
+const sendMail = async (email, subject) => {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
