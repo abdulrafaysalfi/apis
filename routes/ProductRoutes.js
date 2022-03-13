@@ -30,7 +30,7 @@ router.post("/", upload.single("productImage"), async (req, res) => {
   const product = new Product({
     name: name,
     description: description,
-    image: "/images/" + req.file.filename,
+    image: process.env.BASE_URL + "/images/" + req.file.filename,
     price: price,
   });
   product.save((err, result) => {
