@@ -1,8 +1,10 @@
+const hbs = require("nodemailer-express-handlebars");
 const nodemailer = require("nodemailer");
+const path = require("path");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const sendMail = async (email, subject, html) => {
+const sendMail = async (email, subject, html, url) => {
   try {
     const transporter = nodemailer.createTransport({
       host: process.env.HOST,
@@ -14,18 +16,33 @@ const sendMail = async (email, subject, html) => {
         pass: process.env.PASS,
       },
     });
+    // point to the template folder
+    const handlebarOptions = {
+      viewEngine: {
+        partialsDir: path.join(__dirname, "../views/"),
+        defaultLayout: false,
+      },
+      viewPath: path.join(__dirname, "../views/"),
+    };
+
+    // use a template file with nodemailer
+    transporter.use("compile", hbs(handlebarOptions));
+
     await transporter.sendMail({
       from: process.env.USER,
       to: email,
       subject: subject,
-      html: html,
+      template: html, // the name of the template file i.e email.handlebars
+      context: {
+        url: url, // replace {{name}} with Adebola
+      },
     });
     console.log("Email Sent Successfully.");
     return true;
   } catch (error) {
-    return false;
     console.log("Email Sent Failed");
     console.log("EMAIL ERROR => " + error);
+    return false;
   }
 };
 

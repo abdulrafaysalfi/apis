@@ -6,6 +6,7 @@ const IndexRoutes = require("./routes/IndexRoutes");
 const UserRoutes = require("./routes/UsersRoutes");
 const ProductRoutes = require("./routes/ProductRoutes");
 const path = require("path");
+const sendMail = require("./utils/email");
 // Intializing express server
 const app = express();
 

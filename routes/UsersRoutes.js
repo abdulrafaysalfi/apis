@@ -26,16 +26,13 @@ router.get("/:id", (req, res) => {
     }
   });
 });
-router.get("/verify/:id/:token", async (req, res) => {
-  const id = req.params.id;
+router.get("/verify/:token", async (req, res) => {
   const decodedToken = jwtDecode(req.params.token);
-  const user = await User.findById(id);
+  const user = await User.findById(decodedToken["id"]);
   console.log(user);
   console.log(user._id.toString());
   if (user == null) res.status(404).json("Invalid Token/Id");
-  console.log("Token : " + req.params.token);
-  console.log("D-Token : " + decodedToken["id"]);
-  if (decodedToken["id"] === user._id.toString()) {
+  if (decodedToken["id"]) {
     User.updateOne(
       { _id: req.params.id },
       {
@@ -76,14 +73,13 @@ router.post("/register", async (req, res) => {
         return res.status(404).send(err.message);
       } else {
         var tokenObj = new Token({
-          userId: result._id,
           token: jsonwebtoken.sign(
             { id: result._id },
             process.env.TOKEN_SECRET
           ),
         });
-        const html = `<div><em>Dear ${result.name},</em><br>Please Click on the link below to activate your account.<br/><a href='${process.env.BASE_URL}/api/users/verify/${tokenObj.userId}/${tokenObj.token}'><button>Verify Account</button></a><br><br>ARS Team<br>${process.env.USER}</div>`;
-        const emailSent = sendMail(user.email, "Verify Account", html);
+        const url = `${process.env.BASE_URL}/api/users/verify/${tokenObj.token}`;
+        const emailSent = sendMail(user.email, "Verify Account", "email", url);
         if (emailSent) return res.status(200).json(result);
       }
     });
