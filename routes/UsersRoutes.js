@@ -45,7 +45,8 @@ router.get("/verify/:token", async (req, res) => {
         if (err) {
           return res.status(404).send(err.message);
         } else {
-          return res.redirect("localhost:3000");
+          // return res.redirect("localhost:3000");
+          return res.status(200).json(await User.findById(decodedToken["id"]));
         }
       }
     );
