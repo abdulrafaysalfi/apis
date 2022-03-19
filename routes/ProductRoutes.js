@@ -60,7 +60,7 @@ router.put("/:id", upload.single("productImage"), async (req, res) => {
       if (err) {
         return res.status(404).send(err.message);
       } else {
-        return res.status(200).json(result);
+        return res.status(200).send(true);
       }
     }
   );
@@ -72,7 +72,7 @@ router.delete("/:id", (req, res) => {
     if (err) {
       return res.status(404).send(err.message);
     } else {
-      return res.status(200).json(result);
+      return res.status(200).send(true);
     }
   });
 });
