@@ -43,10 +43,9 @@ router.get("/verify/:token", async (req, res) => {
       },
       (err, result) => {
         if (err) {
-          // return res.status(404).send(err.message);
-          return response.redirect("localhost:3000");
+          return res.status(404).send(err.message);
         } else {
-          return res.status(200).json({ status: "Account Activated" });
+          return res.redirect("localhost:3000");
         }
       }
     );
