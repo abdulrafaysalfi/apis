@@ -30,12 +30,10 @@ router.get("/:id", (req, res) => {
 router.get("/verify/:token", async (req, res) => {
   const decodedToken = jwtDecode(req.params.token);
   const user = await User.findById(decodedToken["id"]);
-  console.log(user);
-  console.log(user._id.toString());
   if (user == null) res.status(404).json("Invalid Token/Id");
   if (decodedToken["id"]) {
     User.updateOne(
-      { _id: req.params.id },
+      { _id: user._id.toString() },
       {
         $set: {
           isVerified: true,
@@ -45,8 +43,7 @@ router.get("/verify/:token", async (req, res) => {
         if (err) {
           return res.status(404).send(err.message);
         } else {
-          // return res.redirect("localhost:3000");
-          return res.status(200).json(await User.findById(decodedToken["id"]));
+          return res.redirect("http://localhost:4200/");
         }
       }
     );
