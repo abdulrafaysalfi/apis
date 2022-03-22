@@ -123,6 +123,8 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
+// Forgot Password
+
 // PUT Request
 router.put("/:id", async (req, res) => {
   const { name, role, email, password } = req.body;
