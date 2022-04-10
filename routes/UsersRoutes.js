@@ -54,6 +54,7 @@ router.get("/verify/:token", async (req, res) => {
 router.post("/register", async (req, res) => {
   const { name, role, email, password } = req.body;
   const userExist = await User.find({ email: email });
+  const token = null;
   if (userExist && userExist.length > 0) {
     return res.status(409).json("Email Already Exist");
   } else {
@@ -71,15 +72,13 @@ router.post("/register", async (req, res) => {
 
         return res.status(404).send(err.message);
       } else {
-        var tokenObj = new Token({
-          token: jsonwebtoken.sign(
-            { id: result._id },
-            process.env.TOKEN_SECRET
-          ),
-        });
-        const url = `${process.env.BASE_URL}/api/users/verify/${tokenObj.token}`;
+        token = jsonwebtoken.sign({ id: result._id }, process.env.TOKEN_SECRET);
+
+        const url = `${process.env.BASE_URL}/api/users/verify/${token}`;
         const emailSent = sendMail(user.email, "Verify Account", "email", url);
-        if (emailSent) return res.status(200).json(result);
+
+        if (emailSent)
+          return res.header("auth-token", token).status(200).send(result);
       }
     });
   }
