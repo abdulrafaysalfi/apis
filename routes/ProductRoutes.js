@@ -25,7 +25,7 @@ router.get("/:id", (req, res) => {
 });
 
 // Register/POST
-router.post("/", upload.single("productImage"), async (req, res) => {
+router.post("/", upload.single("image"), async (req, res) => {
   const { name, description, price } = req.body;
   const product = new Product({
     name: name,
