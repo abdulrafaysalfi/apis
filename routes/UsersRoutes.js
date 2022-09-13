@@ -182,4 +182,12 @@ router.delete("/:id", (req, res) => {
   });
 });
 
+// POST EMAIL EXISTS
+router.post("/emailExists", async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (user == null)
+    return res.status(404).send("Email not found.");
+  return res.status(200).send("Email already Exists");
+})
+
 module.exports = router;
